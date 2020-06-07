@@ -1,6 +1,6 @@
 # ssl-exporter
 
-A simple prometheus exporter that returns the `NotAfter` property of given domains.
+A simple prometheus exporter that returns the `NotBefore` and `NotAfter` property of the primary certificate for a list of given domains.
 
 ## Usage
 
