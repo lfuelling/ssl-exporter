@@ -1,0 +1,7 @@
+{
+  "Domains": [
+    "example.com",
+    "test.example.com"
+  ],
+  "Port": 9636
+}
