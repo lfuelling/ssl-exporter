@@ -11,3 +11,5 @@ A simple prometheus exporter that returns the `NotAfter` property of given domai
     - Save changed version as `config.json` in working directory
 4. Run (`./exporter`)
     - Or `./exporter -config ~/config.json` if the config is somewhere else.
+5. (Optional) You can use the `example-systemd.service` file to create the service.
+    - Make sure you edit the placeholder values to fit your setup!

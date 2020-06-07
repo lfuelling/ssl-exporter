@@ -1,0 +1,13 @@
+[Unit]
+Description=SSL Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=USER
+Group=USER
+Type=simple
+ExecStart=/path/to/exporter
+
+[Install]
+WantedBy=multi-user.target
