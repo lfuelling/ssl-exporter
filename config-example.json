@@ -3,5 +3,5 @@
     "example.com",
     "test.example.com"
   ],
-  "Port": 9636
+  "ListenAddress": ":9636"
 }
