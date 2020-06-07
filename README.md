@@ -10,4 +10,4 @@ A simple prometheus exporter that returns the `NotAfter` property of given domai
     - See `config-example.json` for default values
     - Save changed version as `config.json` in working directory
 4. Run (`./exporter`)
-    - Or `./exporter -c ~/config.json` if the config is somewhere else.
+    - Or `./exporter -config ~/config.json` if the config is somewhere else.
