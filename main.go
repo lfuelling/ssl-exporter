@@ -46,6 +46,7 @@ func loadCertificates() ([]*x509.Certificate, string) {
 			}
 
 		}
+		defer resp.Body.Close()
 		fetchMetrics += "cert_fetch_duration{domain=\"" + d + "\"} " + strconv.FormatInt(time.Now().UnixNano()-startTime, 10) + "\n"
 	}
 	return certs, fetchMetrics
