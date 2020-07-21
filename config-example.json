@@ -3,5 +3,6 @@
     "example.com",
     "test.example.com"
   ],
-  "ListenAddress": ":9636"
+  "ListenAddress": ":9636",
+  "IgnoreInvalidTLS": false
 }

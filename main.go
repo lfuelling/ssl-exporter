@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/tls"
 	"crypto/x509"
 	"encoding/json"
 	"flag"
@@ -13,8 +14,9 @@ import (
 )
 
 type Config struct {
-	Domains       []string
-	ListenAddress string
+	Domains          []string
+	ListenAddress    string
+	IgnoreInvalidTLS bool
 }
 
 var config Config
@@ -26,6 +28,7 @@ func loadCertificates() ([]*x509.Certificate, string) {
 
 	for _, d := range config.Domains {
 		log.Println("Loading certificate for '" + d + "'...")
+		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: !config.IgnoreInvalidTLS}
 		resp, err := http.Get("https://" + d + "/")
 		if err != nil {
 			log.Println("Error fetching '"+d+"'!", err)
@@ -46,7 +49,11 @@ func loadCertificates() ([]*x509.Certificate, string) {
 			}
 
 		}
-		defer resp.Body.Close()
+		err1 := resp.Body.Close()
+		if err1 != nil {
+			log.Println("Error closing connection '"+d+"'!", err)
+		}
+
 		fetchMetrics += "cert_fetch_duration{domain=\"" + d + "\"} " + strconv.FormatInt(time.Now().UnixNano()-startTime, 10) + "\n"
 	}
 	return certs, fetchMetrics
