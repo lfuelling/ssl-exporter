@@ -48,10 +48,10 @@ func loadCertificates() ([]*x509.Certificate, string) {
 				fetchMetrics += "cert_fetch_success{domain=\"" + d + "\"} 0\n"
 			}
 
-		}
-		err1 := resp.Body.Close()
-		if err1 != nil {
-			log.Println("Error closing connection '"+d+"'!", err)
+			err1 := resp.Body.Close()
+			if err1 != nil {
+				log.Println("Error closing connection '"+d+"'!", err)
+			}
 		}
 
 		fetchMetrics += "cert_fetch_duration{domain=\"" + d + "\"} " + strconv.FormatInt(time.Now().UnixNano()-startTime, 10) + "\n"
