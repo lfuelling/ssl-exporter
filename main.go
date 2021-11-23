@@ -28,8 +28,14 @@ func loadCertificates() ([]*x509.Certificate, string) {
 
 	for _, d := range config.Domains {
 		log.Println("Loading certificate for '" + d + "'...")
+
 		http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: !config.IgnoreInvalidTLS}
-		resp, err := http.Get("https://" + d + "/")
+
+		client := http.Client{
+			Timeout: 1 * time.Second,
+		}
+
+		resp, err := client.Get("https://" + d + "/")
 		if err != nil {
 			log.Println("Error fetching '"+d+"'!", err)
 			fetchMetrics += "cert_fetch_success{domain=\"" + d + "\"} 0\n"
