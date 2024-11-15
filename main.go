@@ -21,9 +21,9 @@ type Config struct {
 
 var config Config
 
-func loadCertificates() ([]*x509.Certificate, string) {
+func loadCertificates() (map[string]*x509.Certificate, string) {
 	startTime := time.Now().UnixNano()
-	var certs []*x509.Certificate
+	var certs = make(map[string]*x509.Certificate)
 	var fetchMetrics = ""
 
 	for _, d := range config.Domains {
@@ -43,7 +43,7 @@ func loadCertificates() ([]*x509.Certificate, string) {
 			if resp.TLS != nil {
 				certificates := resp.TLS.PeerCertificates
 				if len(certificates) > 0 {
-					certs = append(certs, certificates[0])
+					certs[d] = certificates[0]
 					fetchMetrics += "cert_fetch_success{domain=\"" + d + "\"} 1\n"
 				} else {
 					log.Println("No certificates given for '" + d + "'!")
@@ -76,10 +76,10 @@ func renderMetricsResponse() (string, error) {
 		"# TYPE cert_fetch_duration gauge\n" +
 		"# HELP cert_fetch_success Success of the http call as a 0/1 boolean.\n" +
 		"# TYPE cert_fetch_success gauge\n" + metrics
-	for _, crt := range certs {
+	for domain, crt := range certs {
 		for _, dnsName := range crt.DNSNames {
-			res += `cert_not_before{domain="` + dnsName + `"} ` + strconv.FormatInt(crt.NotBefore.Unix(), 10) + "\n"
-			res += `cert_not_after{domain="` + dnsName + `"} ` + strconv.FormatInt(crt.NotAfter.Unix(), 10) + "\n"
+			res += `cert_not_before{domain="` + domain + `",dnsname="` + dnsName + `"} ` + strconv.FormatInt(crt.NotBefore.Unix(), 10) + "\n"
+			res += `cert_not_after{domain="` + domain + `",dnsname="` + dnsName + `"} ` + strconv.FormatInt(crt.NotAfter.Unix(), 10) + "\n"
 		}
 	}
 
