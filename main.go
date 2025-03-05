@@ -96,7 +96,7 @@ func handleMetrics(w http.ResponseWriter, r *http.Request) {
 		}
 		_, _ = fmt.Fprint(w, response)
 	} else {
-		log.Println("Not found: '" + r.RequestURI)
+		log.Println("Not found: '" + r.RequestURI + "'")
 		w.WriteHeader(404)
 	}
 }
